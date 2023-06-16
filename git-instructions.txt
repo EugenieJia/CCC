@@ -1,0 +1,16 @@
+# make .git file
+git init
+
+# after making changes, commit files to the repository
+git add .
+git commit -m "message"
+
+# set up connection to github (remote), and name it (origin)
+# do this once
+git remote add origin URL
+
+# make sure you are in the right branch
+git branch
+git switch main
+# when you're ready send changes to the online repository (github)
+git push --all
