@@ -32,6 +32,7 @@ dist_gen <- function(n,dist,covar_g){
   bivariate_data
 }
 
+
 # ccc estimating function
 infer <- function(m,n,dist,covar_g){
   # select distribution
@@ -72,6 +73,7 @@ infer <- function(m,n,dist,covar_g){
   data.frame(pc = g_1, est = g_2)
 }
 
+
 # set parameters
 m <- 5000
 n <- 10
@@ -84,7 +86,6 @@ dat <- infer(m,n,dist,covar_g)
   z <- atanh(pc)
   Sp <- dat$est
   Sz <- (1/(1-pc^2))*(Sp)
-
 
 x1 <- c(mean(pc),mean(Sp),mean(z),mean(Sz))
 y1 <- c(sd(pc),NA,sd(z),NA)
