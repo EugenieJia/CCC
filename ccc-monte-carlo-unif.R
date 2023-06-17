@@ -14,6 +14,7 @@ for(i in 1:m){
             mu=c(0, 0),
             Sigma=matrix(c(1, 0.95, 0.95, 1), ncol=2)))
   bivariate_data <- data.frame(V1 = pnorm(bivariate_data$V1), V2 = pnorm(bivariate_data$V1))
+
   y1=c(bivariate_data$V1)
   mean1=mean(y1)
   var1=var(y1)
