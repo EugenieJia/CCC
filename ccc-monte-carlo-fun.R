@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 # terminal command cd /c/temp/stat/project
 
+=======
+>>>>>>> b21aee1a042f4a84496bfb365bcd972d73c364e2
 # initializing
 library(MASS)
 set.seed(100)
@@ -81,10 +84,24 @@ covar_g <- matrix(c(1, 0.95, 0.95, 1),ncol=2)
 # collect data
 dat <- infer(m,n,dist,covar_g)
   pc <- dat$pc
+<<<<<<< HEAD
   z <- atanh(pc)
   Sp <- dat$est
   Sz <- (1/(1-pc^2))*(Sp)
 
+=======
+  mean(pc)
+  sd(pc)
+  
+  z <- atanh(pc)
+  mean(z)
+  sd(z)
+  
+  Sp <- dat$est
+  mean(Sp)
+  Sz <- (1/(1-pc^2))*(Sp)
+  mean(Sz)
+>>>>>>> b21aee1a042f4a84496bfb365bcd972d73c364e2
 
 x1 <- c(mean(pc),mean(Sp),mean(z),mean(Sz))
 y1 <- c(sd(pc),NA,sd(z),NA)
