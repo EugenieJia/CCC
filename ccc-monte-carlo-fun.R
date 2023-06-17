@@ -2,8 +2,8 @@
 
 # initializing
 library(MASS)
-
-##### Preliminaries #####
+mean_g <- c(0,0)
+##### Setup #####
 {
 
   # function shortcuts ####
@@ -28,7 +28,7 @@ library(MASS)
   }
   }
   # function selecting a random variable ####
-  dist_gen <- function(n,dist,covar_g){
+  dist_gen <- function(n,dist,mean_g,covar_g){
     # only accept supported distributions
     if(!dist %in% c("norm","unif","pois")) {
           return()
@@ -37,7 +37,7 @@ library(MASS)
     # generate the correlated MVN
     bivariate_data <- as.data.frame(
       mvrnorm(n=n,
-              mu=c(0, 0),
+              mu=mean_g,
               Sigma=covar_g))
     
     # transform normal to uniform
@@ -56,9 +56,9 @@ library(MASS)
   }
 
   # ccc estimating function ####
-  infer <- function(m,n,dist,covar_g){
+  infer <- function(m,n,dist,mean_g,covar_g){
     # select distribution
-    f_gen <- function(n){dist_gen(n,dist,covar_g)}
+    f_gen <- function(n){dist_gen(n,dist,mean_g,covar_g)}
     
   
     # initialize storage of pc and the asymptotic std
@@ -115,23 +115,9 @@ library(MASS)
     k1  <- c(u$p.value,NA,v$p.value,NA)
     
     # produce table
-    data.frame(mean = x1, std = y1, D = j1, p = k1)
+    data.frame(val = c('pc', 's_pc', 'z', 's_z'), mean = x1, std = y1, D = j1, p = k1)
   }
 }
-
-##### Simulation #####
-
-  # set parameters
-  set.seed(100)
-  
-  m <- 5000
-  n <- 10
-  dist <- "norm"
-  covar_g <- matrix(c(1, 0.95, 0.95, 1),ncol=2)
-
-  # collect data
-  dat <- infer(m,n,dist,covar_g)
-  insta_table(dat)
 
 
 
