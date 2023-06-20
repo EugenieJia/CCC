@@ -14,3 +14,5 @@ git branch
 git switch main
 # when you're ready send changes to the online repository (github)
 git push --all
+# or do this if you have other branches that are not ready
+git push -u origin main

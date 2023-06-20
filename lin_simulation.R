@@ -14,4 +14,5 @@ lin_run("norm",1:5)
 
 lin_run("unif",c(1,3,5))
 
-lin_run("norm",c(1,3,5))
+lin_run("pois",c(1,3,5))
+

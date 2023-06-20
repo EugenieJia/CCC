@@ -2,6 +2,7 @@
 
 # initializing
 library(MASS)
+n <-10
 mean_g <- c(0,0)
 ##### Setup #####
 {
@@ -42,13 +43,13 @@ mean_g <- c(0,0)
     
     # transform normal to uniform
     if (dist != "norm"){
-      bivariate_data <- data.frame(V1 = pnorm(bivariate_data$V1), V2 = pnorm(bivariate_data$V1))
+      bivariate_data <- data.frame(V1 = pnorm(bivariate_data$V1), V2 = pnorm(bivariate_data$V2))
       
       # transform uniform to poisson, normalized
       if (dist == "pois"){
         bivariate_data <- data.frame(
           V1 = qpois(bivariate_data$V1, 9)/3 - 3, 
-          V2 = qpois(bivariate_data$V1, 9)/3 - 3)
+          V2 = qpois(bivariate_data$V2, 9)/3 - 3)
       }
     }
     # output data
@@ -64,6 +65,7 @@ mean_g <- c(0,0)
     # initialize storage of pc and the asymptotic std
     g_1<-numeric(m)
     g_2<-numeric(m)
+    h <- numeric(m)
     
     # make all runs
     for(i in 1:m){
@@ -83,7 +85,7 @@ mean_g <- c(0,0)
       std2=sqrt(var2)
       
       covar=cov(y1,y2)
-      
+      h[i] <- covar
       # calculations
       rhoc=ccc_calc(mean1,mean2,var1,var2,covar)
       g_1[i] <- rhoc
@@ -92,6 +94,7 @@ mean_g <- c(0,0)
       g_2[i] <- sqrt(ccc_asy_sd(n, rho, u, rhoc))
       
     }
+    mean(h)
     data.frame(pc = g_1, est = g_2)
   }
 

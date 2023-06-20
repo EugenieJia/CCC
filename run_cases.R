@@ -63,26 +63,26 @@ lin_run <- function(dist, sel){
   if(1 %in% sel){
     mean_g <- mu0
     covar_g <- mat1
-    case_1 <- insta_sim(m,dist,mean,covar_g)
+    case_1 <<- insta_sim(m,dist,mean_g,covar_g)
   }
   if(2 %in% sel){
     mean_g <- mu1
     covar_g <- mat1
-    case_2 <- insta_sim(m,dist,mean,covar_g)
+    case_2 <<- insta_sim(m,dist,mean_g,covar_g)
   }
   if(3 %in% sel){
     mean_g <- mu1
     covar_g <- mat2
-    case_3 <- insta_sim(m,dist,mean,covar_g)
+    case_3 <<- insta_sim(m,dist,mean_g,covar_g)
   }
   if(4 %in% sel){
     mean_g <- mu1
     covar_g <- mat3
-    case_4 <- insta_sim(m,dist,mean,covar_g)
+    case_4 <<- insta_sim(m,dist,mean_g,covar_g)
   }
   if(5 %in% sel){
     mean_g <- mu2
     covar_g <- mat4
-    case_5 <- insta_sim(m,dist,mean,covar_g)
+    case_5 <<- insta_sim(m,dist,mean_g,covar_g)
   }
 }
