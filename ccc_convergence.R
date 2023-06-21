@@ -4,7 +4,7 @@ source("ccc-monte-carlo-fun.R")
 
 set.seed(100)
 m <- 1                                                # Target correlation
-n <- c(200, 500, 5000, 50000); names(n) <- n     # Number of samples
+n <- c(200, 500, 5000, 30000); names(n) <- n     # Number of samples
 S <- 1000                                               # Number of simulations
 
 # distribution parameters
@@ -28,16 +28,17 @@ S <- 1000                                               # Number of simulations
 # case 3 params
   mean_g <- mu1
   covar_g <- mat2
-  rhog <- .887
+  rhog <- .95
+  ccc <- .887
 # case 5
   mean_g <- mu2
   covar_g <- mat4
   rhog <- 0.5
   ccc <- .36
-dist <- "norm"
+dist <- "unif"
 
 
-# produce plot
+
 res <- sapply(n,
               function(n, rhog, S){
                 replicate(S, mean(infer(m,n,rhog,dist,mean_g,covar_g)[,1]))
@@ -46,10 +47,5 @@ res <- sapply(n,
 boxplot(res, xlab = "Sample size", ylab = "Correlation")
 abline(h = ccc, col = "red")
 
-png('convergence_eval.png')
 
-boxplot(res, xlab = "Sample size", ylab = "Correlation")
-abline(h = ccc, col = "red")
-
-dev.off
 

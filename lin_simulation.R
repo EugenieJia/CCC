@@ -11,6 +11,7 @@ set.seed(100)
 
 # generate data and save to .csv
 # to do: create function that produces file
+dist <-'norm'
 lin_run("norm",1:2)
 full_tb <- mget(ls(pattern ="case_\\d+")) %>% map_df(I, .id = "src") %>% add_column(.before = "src", "dist" = dist)
 write_csv(full_tb, paste(dist,"ccc","sim.csv", sep = "_"))
