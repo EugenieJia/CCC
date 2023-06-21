@@ -2,8 +2,7 @@
 
 # initializing
 library(MASS)
-n <-10
-mean_g <- c(0,0)
+
 ##### Setup #####
 {
 
@@ -29,37 +28,52 @@ mean_g <- c(0,0)
   }
   }
   # function selecting a random variable ####
-  dist_gen <- function(n,dist,mean_g,covar_g){
+  dist_gen <- function(n,rhog,dist,mean_g,covar_g){
     # only accept supported distributions
     if(!dist %in% c("norm","unif","pois")) {
           return()
     }
     
     # generate the correlated MVN
-    bivariate_data <- as.data.frame(
+    if(dist == "norm"){  
+      bivariate_data <- as.data.frame(
       mvrnorm(n=n,
               mu=mean_g,
               Sigma=covar_g))
-    
+    }
     # transform normal to uniform
-    if (dist != "norm"){
-      bivariate_data <- data.frame(V1 = pnorm(bivariate_data$V1), V2 = pnorm(bivariate_data$V2))
+    if (dist == "unif"){
+      # bivariate_data <- data.frame(V1 = gen.gauss.cop(n,mean_g,covar_g)[,1], V2 = gen.gauss.cop(n,mean_g,covar_g)[,2])
+      r <- 2 * sin(rhog * pi/6)
+      P <- toeplitz(c(1, r))
+      d <- nrow(P)
+      bivariate_data <- data.frame(
+        pnorm(matrix(rnorm(n*d), ncol = d) %*% chol(P))
+      )
       
-      # transform uniform to poisson, normalized
-      if (dist == "pois"){
-        bivariate_data <- data.frame(
-          V1 = qpois(bivariate_data$V1, 9)/3 - 3, 
-          V2 = qpois(bivariate_data$V2, 9)/3 - 3)
-      }
+      bivariate_data <- data.frame(
+        V1 = mean_g[1] + sqrt(12*covar_g[1,1])*((bivariate_data[,1])-1/2), 
+        V2 = mean_g[2] + sqrt(12*covar_g[2,2])*((bivariate_data[,2])-1/2)
+      )
+    }
+    # transform uniform to poisson, normalized
+    if (dist == "pois"){
+      bivariate_data <- data.frame(
+        V1 = pnorm(bivariate_data[,1], mean_g[1],covar_g[1,1]), 
+        V2 = pnorm(bivariate_data[,2], mean_g[2],covar_g[2,2])
+      )
+      bivariate_data <- data.frame(
+        V1 = qpois(bivariate_data$V1, 9)/3 - 3, 
+        V2 = qpois(bivariate_data$V2, 9)/3 - 3)
     }
     # output data
     bivariate_data
   }
 
   # ccc estimating function ####
-  infer <- function(m,n,dist,mean_g,covar_g){
+  infer <- function(m,n,rhog,dist,mean_g,covar_g){
     # select distribution
-    f_gen <- function(n){dist_gen(n,dist,mean_g,covar_g)}
+    f_gen <- function(n){dist_gen(n,rhog,dist,mean_g,covar_g)}
     
   
     # initialize storage of pc and the asymptotic std
@@ -95,7 +109,8 @@ mean_g <- c(0,0)
       
     }
     mean(h)
-    data.frame(pc = g_1, est = g_2)
+    dat <- data.frame(pc = g_1, est = g_2)
+    dat
   }
 
   # analysis function for table ####
