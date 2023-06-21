@@ -58,6 +58,10 @@ library(MASS)
     }
     # transform uniform to poisson, normalized
     if (dist == "pois"){
+      bivariate_data <- as.data.frame(
+        mvrnorm(n=n,
+                mu=mean_g,
+                Sigma=covar_g))
       bivariate_data <- data.frame(
         V1 = pnorm(bivariate_data[,1], mean_g[1],covar_g[1,1]), 
         V2 = pnorm(bivariate_data[,2], mean_g[2],covar_g[2,2])
@@ -109,7 +113,7 @@ library(MASS)
       
     }
     mean(h)
-    dat <- data.frame(pc = g_1, est = g_2)
+    dat <<- data.frame(pc = g_1, est = g_2)
     dat
   }
 

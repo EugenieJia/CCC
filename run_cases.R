@@ -90,4 +90,9 @@ lin_run <- function(dist, sel){
     rhog <- 0.5
     case_5 <<- insta_sim(m,rhog,dist,mean_g,covar_g)
   }
+  
+  prin <- paste('case',sep = '_', sel)
+  # full_tb <- mget(ls(pattern ="case_\\d+")) %>% map_df(I, .id = "src") %>% add_column(.before = "src", "dist" = dist)
+  # remove(list = prin)
+  
 }
