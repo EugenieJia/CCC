@@ -1,0 +1,31 @@
+library(boot)
+library(epiR)
+library(MCMCpack)
+
+rmvt <- function(n, mu, sigma, v) {
+  ## n is the sample size
+  ## mu is the mean vector
+  ## sigma is the covariance matrix
+  ## sigma does not have to be of full rank
+  ## v is the degrees of freedom
+  p <- length(mu)
+  x <- matrix( RcppZiggurat::zrnorm(n * p), ncol = p )
+  w <- sqrt( v / rchisq(n, v) )
+  w * x %*% chol(sigma) + rep(mu, rep(n, p) )
+}
+
+mu <- c(100, 100)
+sigma <- matrix(c(100, 0.99*sqrt(100)*sqrt(100), 0.99*sqrt(100)*sqrt(100), 100), nrow=2)
+v <- 5
+n <- 1000
+
+# Use the defined function to generate random numbers from the multivariate t distribution
+set.seed(123)  # Set a random number seed to ensure reproducible results
+samples <- rmvt(n, mu, sigma, v)
+samples #data from multivariate t distribution
+
+y1 <- samples[, 1]
+y2 <- samples[, 2]
+
+# Compute overall CCC
+CCC <- 2*cov(y1, y2)/(var(y1)+var(y2)+(mean(y1)-mean(y2))^2)
